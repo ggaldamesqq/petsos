@@ -81,8 +81,6 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }
