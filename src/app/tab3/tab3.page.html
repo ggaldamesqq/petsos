@@ -1,67 +1,44 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Crear publicacion
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content class="ion-padding">
-
-  <ion-grid>
-    <ion-row>
-      <ion-col size-md="1" offset-md="1">
-        <ion-card>
-          <ion-card-content>
-            <form [formGroup]="publicacionForm" (ngSubmit)="publicar()">
-              <ion-list>
-
-                <ion-item lines="full">
-                  <ion-label position="floating" style="font-size:12px;">Elegir ubicación</ion-label>
-                  <ion-input type="text" formControlName="ubicación"></ion-input>
-                </ion-item> <br>
-
-                <ion-item lines="full">
-                  <label for="file-upload" position="floating" style="font-size:12px;"> Elegir foto de la galería
-                    <input id="file-upload" type="file" accept="image/*" hidden formControlName="selectedFile">
-                    <img src="https://cdn-icons-png.flaticon.com/512/336/336035.png" alt="Seleccionar archivo">
-                  </label>
-               </ion-item>
-
-                <ion-item lines="full">
-                  <ion-label position="floating" style="font-size:12px;">Titulo</ion-label>
-                  <ion-input type="text" formControlName="titulo"></ion-input>
-                </ion-item>
-
-                <ion-item lines="full">
-                  <ion-label position="floating" style="font-size:12px;">Descripcion</ion-label>
-                  <ion-textarea type="text" rows="2" cols="50" formControlName="description"></ion-textarea>
-                </ion-item>
-
-                <ion-item lines="full">
-                  <ion-label position="floating" style="font-size:12px;" interface="popover">
-                    Categoría
-                  </ion-label>
-                  <ion-select formControlName="categoria">
-                    <ion-select-option style="font-size:12px;" value="option1">Animal perdido
-                    </ion-select-option>
-                    <ion-select-option style="font-size:12px;" value="option2">Veterinaria
-                    </ion-select-option>
-                    <ion-select-option style="font-size:12px;" value="option3">Tienda
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-
-              </ion-list>
-              <ion-button expand="block" type="submit" [disabled]="!publicacionForm.valid">
-                Ingresar
-              </ion-button>
-            </form>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row> <br> <br> <br>
-
-  </ion-grid>
-
+  <div class="container">
+    <ion-card class="custom-card">
+      <ion-card-header class="custom-card-header">
+        <ion-card-title class="custom-card-title">Crear publicación</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="custom-card-content">
+        <form [formGroup]="publicacionForm" (ngSubmit)="publicar()">
+          <ion-list class="custom-list">
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Elegir ubicación</ion-label>
+              <ion-input type="text" formControlName="ubicacion"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <label for="file-upload">
+                Subir foto
+                <ion-icon name="image-outline" slot="start"></ion-icon>
+              </label>
+              <input id="file-upload" type="file" accept="image/*" hidden formControlName="selectedFile">
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Título</ion-label>
+              <ion-input type="text" formControlName="titulo"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Descripción</ion-label>
+              <ion-textarea formControlName="description"></ion-textarea>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Categoría</ion-label>
+              <ion-select formControlName="categoria" interface="popover">
+                <ion-select-option value="option1">Animal perdido</ion-select-option>
+                <ion-select-option value="option2">Veterinaria</ion-select-option>
+                <ion-select-option value="option3">Tienda</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+          <ion-button expand="block" type="submit" [disabled]="!publicacionForm.valid">Ingresar</ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

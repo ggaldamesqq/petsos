@@ -8,7 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page implements OnInit {
+
   public publicacionForm: FormGroup;
+
 
   constructor(private formBuilder: FormBuilder, private router: Router) {
     
@@ -22,12 +24,11 @@ export class Tab3Page implements OnInit {
 
   }
 
-
   public publicar(): void {
     // Código para crear publicacion
   }
 
-  ngOnInit(){ 
+  ngOnInit() {
   }
 
 }
