@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Detalles de la publicación
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <img [src]="publicacion.imagenUrl"/>
+    <!-- Mostrar detalles de la publicación -->
+    <ion-card-header>
+      <ion-card-subtitle>{{ publicacion.titulo }}, {{ publicacion.nombre }}</ion-card-subtitle>
+      <ion-card-title>{{ publicacion.tipo }}</ion-card-title>
+      
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item lines="none">
+        <ion-label>
+          <h2>Especie</h2>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item lines="none">
+        <ion-label>
+          <p>{{ publicacion.especie }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="publicacion.raza">
+        <ion-label>
+          <h2>Raza</h2>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item lines="none" *ngIf="publicacion.raza">
+        <ion-label>
+          <p>{{ publicacion.raza }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <h2>Descripción</h2>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item lines="none">
+        <ion-label style="white-space: normal;">
+          <p>{{ publicacion.descripcion }}</p>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item lines="none">
+        <ion-label>
+          <h2>Ubicación</h2>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item lines="none">
+        <ion-label>
+          <p>{{ publicacion.direccion }}, {{ publicacion.comuna }}, {{ publicacion.region }}</p>
+        </ion-label>
+      </ion-item>
+    
+      <!-- Otros campos de la publicación -->
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
+
