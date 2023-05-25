@@ -23,26 +23,29 @@
               <ion-list>
                 <ion-item lines="full">
                   <ion-label position="floating" style="font-size:12px;">Correo</ion-label>
-                  <ion-input type="text" formControlName="username"></ion-input>
+                  <ion-input type="email" formControlName="correo"></ion-input>
                 </ion-item>
                 <ion-item lines="full">
                   <ion-label position="floating" style="font-size:12px;">Contraseña</ion-label>
-                  <ion-input type="password" formControlName="password"></ion-input>
+                  <ion-input type="password" formControlName="contrasenna"></ion-input>
                 </ion-item>
               </ion-list>
               <ion-button expand="block" type="submit" [disabled]="!loginForm.valid"
-                          (click)="entrar()">Ingresar
+                          (click)="iniciarSesion(loginForm.value.correo, loginForm.value.contrasenna)">Ingresar
               </ion-button>
-              <ion-button expand="block" type="submit" (click)="entrar()">Ingresar</ion-button>
+              <!-- <ion-button expand="block" type="submit" (click)="entrar()">Ingresar</ion-button> -->
             </form>
             <div class="forgot-password">
               <a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div class="registro-cuenta" style="text-align: center;">
+              <a (click)="Registro()">Crear cuenta</a>
             </div>
           </ion-card-content>
 
         </ion-card>
 
-        <div class="social-login">
+        <div class="social-login ">
           <ion-button class="google" color="danger">
             <ion-icon slot="start" name="logo-google"></ion-icon>
             Google

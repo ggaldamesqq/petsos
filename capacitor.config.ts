@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.petsos.app',
+  appId: 'io.ionic.starter',
   appName: 'PetSOS',
   webDir: 'www',
   server: {
