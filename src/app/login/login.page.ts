@@ -48,9 +48,12 @@ export class LoginPage implements OnInit {
           else if (responseBody.message == "El usuario no está activo"){
             this.mostrarAlerta(JSON.stringify(responseBody.message ), "Error");
           }
+<<<<<<< HEAD
           else if (responseBody.message == "El usuario no existe"){
             this.mostrarAlerta(JSON.stringify(responseBody.message ), "Error");
           }
+=======
+>>>>>>> da27e3814bb3279d289914360322c108a0e37f43
         },
         err => {
           this.mostrarAlerta(JSON.stringify(err.error), "Error");
