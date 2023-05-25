@@ -15,11 +15,7 @@ import { MapModalModule } from './map-modal/map-modal.module';
 
 @NgModule({
   declarations: [AppComponent],
-<<<<<<< HEAD
-  imports:   [HttpClientModule, BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },Storage],
-  bootstrap: [AppComponent],
-=======
+
   imports: [
     MapModalModule,
     HttpClientModule,
@@ -35,7 +31,7 @@ import { MapModalModule } from './map-modal/map-modal.module';
     Geolocation
   ],
   bootstrap: [AppComponent]
->>>>>>> da27e3814bb3279d289914360322c108a0e37f43
+
 })
 export class AppModule {}
 
