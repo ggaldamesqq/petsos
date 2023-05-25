@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>PaginaValidacion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">PaginaValidacion</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form [formGroup]="validacionForm" (ngSubmit)="verifyCode()">
+    <ion-item>
+      <ion-label position="stacked">Código de Verificación</ion-label>
+      <ion-input formControlName="codigo" type="text"></ion-input>
+    </ion-item>
+    <ion-button expand="full" type="submit" >Verificar Código</ion-button>
+  </form>
+</ion-content>

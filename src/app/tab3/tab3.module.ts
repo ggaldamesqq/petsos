@@ -5,8 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Tab3Page } from './tab3.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-
+import { MapModalModule } from '../map-modal/map-modal.module'; 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
+
+
+
 
 @NgModule({
   imports: [
@@ -15,7 +18,8 @@ import { Tab3PageRoutingModule } from './tab3-routing.module';
     FormsModule,
     ExploreContainerComponentModule,
     ReactiveFormsModule,
-    Tab3PageRoutingModule
+    Tab3PageRoutingModule,
+    MapModalModule
   ],
   declarations: [Tab3Page]
 })
