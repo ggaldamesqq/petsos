@@ -1,3 +1,4 @@
+
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { NavParams, ModalController } from '@ionic/angular';
@@ -10,6 +11,7 @@ declare var google: any;
   templateUrl: './map-modal.component.html',
   styleUrls: ['./map-modal.component.scss'],
 })
+
 export class MapModalComponent implements AfterViewInit {
   @ViewChild('map', { static: false }) mapElement!: ElementRef;
   private map: any;
@@ -35,7 +37,7 @@ export class MapModalComponent implements AfterViewInit {
 
     this.map = new google.maps.Map(mapEle, {
       center: myLatLng,
-      zoom: 10
+      zoom: 15
     });
 
     const marker = new google.maps.Marker({
@@ -60,4 +62,5 @@ export class MapModalComponent implements AfterViewInit {
     const data = this.form.value;
     this.modalController.dismiss(data);
   }
+
 }
