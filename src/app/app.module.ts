@@ -15,6 +15,7 @@ import { MapModalModule } from './map-modal/map-modal.module';
 
 @NgModule({
   declarations: [AppComponent],
+
   imports: [
     MapModalModule,
     HttpClientModule,
@@ -30,6 +31,7 @@ import { MapModalModule } from './map-modal/map-modal.module';
     Geolocation
   ],
   bootstrap: [AppComponent]
+
 })
 export class AppModule {}
 

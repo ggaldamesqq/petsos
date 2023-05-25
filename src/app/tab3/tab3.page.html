@@ -1,4 +1,3 @@
-
 <ion-content class="ion-padding">
   <div class="container">
     <ion-card class="custom-card">
@@ -21,7 +20,7 @@
                 Subir foto
                 <ion-icon name="image-outline" slot="start"></ion-icon>
               </label>
-              <input id="file-upload" type="file" accept="image/*" hidden formControlName="selectedFile">
+              <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*" hidden formControlName="selectedFile">
             </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Título</ion-label>
@@ -39,8 +38,28 @@
                 <ion-select-option value="option3">Servicio</ion-select-option>
               </ion-select>
             </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Especie</ion-label>
+              <ion-input type="text" formControlName="especie"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Raza</ion-label>
+              <ion-input type="text" formControlName="raza"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input type="text" formControlName="nombre"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Tipo</ion-label>
+              <ion-input type="text" formControlName="tipo"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Contacto</ion-label>
+              <ion-input type="text" formControlName="contacto"></ion-input>
+            </ion-item>
           </ion-list>
-          <ion-button expand="block" type="submit" [disabled]="!publicacionForm.valid">Ingresar</ion-button>
+          <ion-button expand="block" type="submit" [disabled]="!publicacionForm.valid">Publicar</ion-button>
         </form>
       </ion-card-content>
     </ion-card>
