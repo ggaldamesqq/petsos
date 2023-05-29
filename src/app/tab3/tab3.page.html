@@ -9,7 +9,7 @@
           <ion-list class="custom-list">
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Ubicación</ion-label>
-              <ion-input type="text" [value]="ubicacionValue" readonly></ion-input>
+              <ion-input type="text" [value]="ubicacionValue" formControlName="ubicacion" readonly></ion-input>
               <div>
                 <ion-button (click)="obtenerUbicacionActual()">Ubicación actual</ion-button>
                 <ion-button (click)="abrirMapaModal()">Elegir ubicación</ion-button>

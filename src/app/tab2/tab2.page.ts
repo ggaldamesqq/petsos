@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 declare var google: any;
 
@@ -16,36 +17,38 @@ interface Marker {
   styleUrls: ['tab2.page.scss'],
 })
 export class Tab2Page implements OnInit {
-  constructor() {}
+  markers: Marker[] = [];
+  constructor(private http:HttpClient) {}
 
-  markers: Marker[] = [
-    {
-      position: {
-        lat: -33.4170258,
-        lng: -70.6055206,
-      },
-      title: 'Costanera Center'
-    },
-    {
-      position: {
-        lat: -33.4200929,
-        lng: -70.6128194226865,
-      },
-      title: 'Parque de las esculturas'
-    },
-    {
-      position: {
-        lat: -33.42862,
-        lng: -70.6195459,
-      },
-      title: 'Metro Manuel Montt'  	 	
-    },
-  ];
+  // markers: Marker[] = [
+  //   {
+  //     position: {
+  //       lat: -33.4170258,
+  //       lng: -70.6055206,
+  //     },
+  //     title: 'Costanera Center'
+  //   },
+  //   {
+  //     position: {
+  //       lat: -33.4200929,
+  //       lng: -70.6128194226865,
+  //     },
+  //     title: 'Parque de las esculturas'
+  //   },
+  //   {
+  //     position: {
+  //       lat: -33.42862,
+  //       lng: -70.6195459,
+  //     },
+  //     title: 'Metro Manuel Montt'  	 	
+  //   },
+  // ];
 
   map = null ;
 
   ngOnInit() {
     this.loadMap();
+    this.MostrarPinsPublicacion();
   }
 
   loadMap() {
@@ -79,5 +82,39 @@ export class Tab2Page implements OnInit {
       this.addMarker(marker);
     });
   }
+
+  MostrarPinsPublicacion() {
+    var mostrar = {}
+    this.http
+      .post('https://m50a5vjuy9.execute-api.us-east-1.amazonaws.com/desa', mostrar)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          let responseBody = JSON.parse(res.body);
+
+        if (responseBody.pinsMapa) {
+          const pinsMapa = responseBody.pinsMapa;
+          this.markers = this.convertirMarcadores(pinsMapa);
+          this.renderMarkers();
+          console.log(pinsMapa);
+        }
+        },
+        err => {
+          console.error('Error al enviar la publicación:', err);
+        }
+      );
+  
+    console.log('Datos de la publicación:', mostrar);
+  }
+  convertirMarcadores(pinsMapa: any[]): Marker[] {
+    return pinsMapa.map((pin: any) => ({
+      position: {
+        lat: parseFloat(pin.latitud) || 0,
+        lng: parseFloat(pin.longitud) || 0
+      },
+      title: pin.titulo
+    }));
+  }
+
 
 }

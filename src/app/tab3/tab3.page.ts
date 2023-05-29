@@ -121,7 +121,20 @@ export class Tab3Page implements OnInit {
     }
   }
   
-  IngresarPublicacion(titulo: string, descripcion: string, categoria: string, especie: string, raza: string, nombre: string, tipo: string, contacto: string) {
+  IngresarPublicacion(
+    titulo: string,
+    descripcion: string,
+    categoria: string,
+    especie: string,
+    raza: string,
+    nombre: string,
+    tipo: string,
+    contacto: string
+  ) {
+    const ubicacion = this.publicacionForm.get('ubicacion')?.value;
+    const latitud = ubicacion.lat;
+    const longitud = ubicacion.lng;
+  
     const datosPublicacion = {
       titulo: titulo,
       descripcion: descripcion,
@@ -131,25 +144,26 @@ export class Tab3Page implements OnInit {
       nombre: nombre,
       tipo: tipo,
       contacto: contacto,
-      // imagen: base64Data
+      latitud: latitud,
+      longitud: longitud
     };
-    this.http.post('https://os3ry5kxxh.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
-    .subscribe(
-      (res: any) => {
-        console.log(res);
-        let responseBody = JSON.parse(res.body);
-        if (responseBody.message == "Publicación guardada y publicada correctamente") {
-          this.router.navigate(['tabs/tab3']); // Navega a las tabs si la publicación fue guardada y publicada correctamente
+  console.log(datosPublicacion);
+    this.http
+      .post('https://os3ry5kxxh.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          let responseBody = JSON.parse(res.body);
+          if (responseBody.message == "Publicación guardada y publicada correctamente") {
+            this.router.navigate(['tabs/tab3']);
+          }
+        },
+        err => {
+          console.error('Error al enviar la publicación:', err);
         }
-      },
-      err => {
-        console.error('Error al enviar la publicación:', err);
-      }
-    );
-    // Realiza la lógica para ingresar la publicación utilizando los datos recibidos
+      );
   
     console.log('Datos de la publicación:', datosPublicacion);
-    // Realiza la lógica para ingresar la publicación utilizando los datos recibidos
   }
   
   onFileChange(event: any): void {
