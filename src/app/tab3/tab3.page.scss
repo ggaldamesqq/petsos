@@ -1,31 +1,27 @@
- .container {
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 85vh;
 }
-
 .custom-card {
-  text-align: center;
-  width: 80%;
-  max-width: 400px;
-  margin-top: 25px;
-  margin-bottom: 10px;
+  width: 100%;
+  height: 800px;
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%;
+  margin-top: 150px;
+  margin-bottom: 25px;
+}
+.header-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  z-index: -1;
 }
 
-.custom-card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-.custom-card-title {
-  text-align: center;
-}
 
-.map-modal {
-  max-width: 90%;
-  width: 600px;
-  height: 80%;
-}
