@@ -10,35 +10,12 @@
   <ion-card>
     <img src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-Clipart.png" alt="Foto de perfil">
     <ion-card-header>
-      <ion-card-title>{{nombre}} {{apellido}}</ion-card-title>
+      <ion-card-title>{{id}} - {{nombre}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-grid>
-        <ion-row>
-          <ion-col size="auto">
-            <ion-icon name="call-outline"></ion-icon>
-          </ion-col>
-          <ion-col>
-            <p>{{telefono}}</p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="auto">
-            <ion-icon name="calendar-outline"></ion-icon>
-          </ion-col>
-          <ion-col>
-            <p>{{anioNacimiento}}</p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="auto">
-            <ion-icon name="home-outline"></ion-icon>
-          </ion-col>
-          <ion-col>
-            <p>{{direccion}}</p>
-          </ion-col>
-        </ion-row>
+       
         <ion-row>
           <ion-col size="auto">
             <ion-icon name="mail-outline"></ion-icon>
@@ -47,14 +24,7 @@
             <p>{{email}}</p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="auto">
-            <ion-icon name="language-outline"></ion-icon>
-          </ion-col>
-          <ion-col>
-            <p>{{idioma}}</p>
-          </ion-col>
-        </ion-row>
+        
       </ion-grid>
     </ion-card-content>
 
@@ -80,7 +50,6 @@
             <h2>{{publicacion.titulo}}</h2>
             <p>{{publicacion.categoria}}</p>
             <p>{{publicacion.ubicacion}}</p>
-            <p>{{publicacion.visualizaciones}} visualizaciones</p>
             <ion-buttons slot="end">
               <ion-button color="primary" fill="clear" (click)="editarPublicacion(publicacion)">
                 <ion-icon name="create"></ion-icon>

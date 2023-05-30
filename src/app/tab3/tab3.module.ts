@@ -7,8 +7,9 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 // import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
-
+import { MapModalModule } from '../map-modal/map-modal.module'; 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
+
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { Tab3PageRoutingModule } from './tab3-routing.module';
     FormsModule,
     ExploreContainerComponentModule,
     ReactiveFormsModule,
-    Tab3PageRoutingModule
+    Tab3PageRoutingModule,
+    MapModalModule
   ],
   declarations: [Tab3Page]
 })

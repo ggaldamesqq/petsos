@@ -16,12 +16,13 @@ export class Tab3Page implements OnInit {
   ubicacionValue: string = '';
   markerPosition: any;
   selectedFile: File | null = null;
+  base64Image: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private modalController: ModalController,
-    private http : HttpClient
+    private http: HttpClient
   ) {
     this.publicacionForm = this.formBuilder.group({
       ubicacion: ['', Validators.required],
@@ -59,18 +60,25 @@ export class Tab3Page implements OnInit {
   }
 
   async obtenerUbicacionActual() {
-    const coordinates = await Geolocation.getCurrentPosition();
-    this.ubicacionValue = `${coordinates.coords.latitude}, ${coordinates.coords.longitude}`;
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      this.ubicacionValue = `${coordinates.coords.latitude}, ${coordinates.coords.longitude}`;
+      this.markerPosition = {
+        lat: coordinates.coords.latitude,
+        lng: coordinates.coords.longitude
+      };
+      this.publicacionForm.patchValue({ ubicacion: this.ubicacionValue });
 
-    this.publicacionForm.patchValue({ ubicacion: this.ubicacionValue });
-    this.markerPosition = {
-      lat: coordinates.coords.latitude,
-      lng: coordinates.coords.longitude
-    };
+
+      console.log(this.publicacionForm);
+    } catch (error) {
+      console.error('Error al obtener la ubicación actual:', error);
+    }
   }
 
   public publicar(): void {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
+    console.log(ubicacion);
     const selectedFile = this.publicacionForm.get('selectedFile')?.value;
     const titulo = this.publicacionForm.get('titulo')?.value;
     const description = this.publicacionForm.get('description')?.value;
@@ -80,7 +88,7 @@ export class Tab3Page implements OnInit {
     const nombre = this.publicacionForm.get('nombre')?.value;
     const tipo = this.publicacionForm.get('tipo')?.value;
     const contacto = this.publicacionForm.get('contacto')?.value;
-  
+
     // Obtén el texto correspondiente a la categoría seleccionada
     let categoriaTexto = '';
     if (categoria === 'option1') {
@@ -90,7 +98,7 @@ export class Tab3Page implements OnInit {
     } else if (categoria === 'option3') {
       categoriaTexto = 'Servicio';
     }
-  
+
     // Utiliza los valores del formulario
     console.log('Ubicación:', ubicacion);
     console.log('Selected File:', selectedFile);
@@ -102,25 +110,14 @@ export class Tab3Page implements OnInit {
     console.log('Nombre:', nombre);
     console.log('Tipo:', tipo);
     console.log('Contacto:', contacto);
-  
-    if (ubicacion && selectedFile && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
-      // Convierte el archivo seleccionado a formato base64
-      // const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   const base64Data = reader.result as string;
-      //   // Aquí puedes utilizar la variable 'base64Data' que contiene el archivo en formato base64
-      //   console.log('Archivo seleccionado en formato base64:', base64Data);
 
-       
-        this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto);
-   
-      // };
-      // reader.readAsDataURL(selectedFile);
+    if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
+      this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, this.base64Image);
     } else {
       // Maneja el caso en el que algún valor sea nulo
     }
   }
-  
+
   IngresarPublicacion(
     titulo: string,
     descripcion: string,
@@ -129,12 +126,19 @@ export class Tab3Page implements OnInit {
     raza: string,
     nombre: string,
     tipo: string,
-    contacto: string
+    contacto: string,
+    imagen: string
   ) {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
-    const latitud = ubicacion.lat;
-    const longitud = ubicacion.lng;
-  
+    console.log(ubicacion);
+    const latitud = typeof ubicacion === 'object' ? ubicacion.lat.toString() : ubicacion.split(',')[0].trim();
+    const longitud = typeof ubicacion === 'object' ? ubicacion.lng.toString() : ubicacion.split(',')[1].trim();
+
+    console.log('Latitud:', latitud);
+    console.log('Longitud:', longitud);
+
+    console.log(latitud, longitud);
+
     const datosPublicacion = {
       titulo: titulo,
       descripcion: descripcion,
@@ -145,9 +149,12 @@ export class Tab3Page implements OnInit {
       tipo: tipo,
       contacto: contacto,
       latitud: latitud,
-      longitud: longitud
+      longitud: longitud,
+      imagen: imagen
     };
-  console.log(datosPublicacion);
+
+    console.log(datosPublicacion);
+
     this.http
       .post('https://os3ry5kxxh.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
       .subscribe(
@@ -155,24 +162,33 @@ export class Tab3Page implements OnInit {
           console.log(res);
           let responseBody = JSON.parse(res.body);
           if (responseBody.message == "Publicación guardada y publicada correctamente") {
-            this.router.navigate(['tabs/tab3']);
+            location.reload();
+            // this.router.navigate(['tabs/tab2']);
+
           }
         },
         err => {
           console.error('Error al enviar la publicación:', err);
         }
       );
-  
+
     console.log('Datos de la publicación:', datosPublicacion);
   }
-  
+
   onFileChange(event: any): void {
-    if (event.target.files && event.target.files.length) {
-      this.selectedFile = event.target.files[0];
+    const files = event.target.files;
+    
+    if (files && files.length) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.base64Image = reader.result as string;
+      };
+      reader.readAsDataURL(files[0]);
     }
   }
 
-  ngOnInit() {}
+
+  ngOnInit() { }
 }
 
 

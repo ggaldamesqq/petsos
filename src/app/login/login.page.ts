@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { AlertController } from '@ionic/angular';
 import { HttpResponse } from '@angular/common/http';
+import { CorreoService } from '../correo.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import { HttpResponse } from '@angular/common/http';
 export class LoginPage implements OnInit {
   public loginForm: FormGroup;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private router: Router, private alertController: AlertController) {
+  constructor(private correoService: CorreoService,private http: HttpClient, private formBuilder: FormBuilder, private router: Router, private alertController: AlertController) {
     this.loginForm = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.email]],
       contrasenna: ['', Validators.required]
@@ -39,6 +40,7 @@ export class LoginPage implements OnInit {
           console.log(res);
           let responseBody = JSON.parse(res.body);
           if (responseBody.message == "Inicio de sesión exitoso") {
+            this.correoService.correo = email;
             this.router.navigate(['tabs']); // Navega a las tabs si el inicio de sesión fue exitoso
           }
           else if (responseBody.message == "La contraseña es incorrecta")

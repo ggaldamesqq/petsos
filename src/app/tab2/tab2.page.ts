@@ -10,6 +10,9 @@ interface Marker {
     lng: number,
   };
   title: string;
+  imagen: string;
+  descripcion:string;
+  contacto:string;
 }
 
 @Component({
@@ -92,17 +95,21 @@ export class Tab2Page implements OnInit {
         lat: parseFloat(pin.latitud) || 0,
         lng: parseFloat(pin.longitud) || 0
       },
-      title: pin.titulo
+      title: pin.titulo,
+      descripcion:pin.descripcion,
+      imagen: pin.imagen,
+      contacto:pin.contacto
     }));
   }
 
   async showMarkerInfo(marker: Marker) {
     const alert = await this.alertController.create({
       header: marker.title,
-      message: `
-          <p>${marker.title}</p>
-          <p>${marker.position.lat}, ${marker.position.lng}</p>
-          <img src="https://www.perrosamigos.com/Uploads/perrosamigos.com/ImagenesGrandes/m-perros-dalmata.html-4.jpg"> `,
+      message: 
+        `<p>${marker.descripcion}</p>
+        <p>${marker.contacto}</p>
+        <img src="${marker.imagen}">`,
+
       buttons: ['OK']
     });
 

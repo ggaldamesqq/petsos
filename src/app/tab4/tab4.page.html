@@ -13,7 +13,7 @@
     <ion-item *ngFor="let publicacion of publicaciones" [routerLink]="['/publicacion', publicacion.id]" [state]="{ publicacion: publicacion }">
 
       <ion-thumbnail slot="start">
-        <img [src]="publicacion.imagenUrl" alt="Imagen de la publicación">
+        <img [src]="publicacion.imagen" alt="Imagen de la publicación">
       </ion-thumbnail>
       <ion-label>
         <h2>{{ publicacion.titulo }}</h2>
