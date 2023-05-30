@@ -1,2 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Map Modal
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Listo</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-  <div id="map_canvas"></div>
+<ion-content>
+  <div #map id="map" class="map-modal"></div>
+</ion-content>

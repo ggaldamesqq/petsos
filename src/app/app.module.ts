@@ -9,10 +9,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Storage } from '@ionic/storage';
 
+import { MapModalModule } from './map-modal/map-modal.module'; 
+
+
 
 @NgModule({
   declarations: [AppComponent],
-  imports:   [HttpClientModule, BrowserModule, IonicModule.forRoot(), AppRoutingModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
+  imports:   [MapModalModule, HttpClientModule, BrowserModule, IonicModule.forRoot({innerHTMLTemplatesEnabled: true}), AppRoutingModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },Storage],
   bootstrap: [AppComponent],
 })

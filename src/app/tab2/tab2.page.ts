@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 declare var google: any;
 
@@ -16,62 +18,42 @@ interface Marker {
   styleUrls: ['tab2.page.scss'],
 })
 export class Tab2Page implements OnInit {
-  constructor() {}
+  markers: Marker[] = [];
+  map = null;
 
-  markers: Marker[] = [
-    {
-      position: {
-        lat: -33.4170258,
-        lng: -70.6055206,
-      },
-      title: 'Costanera Center'
-    },
-    {
-      position: {
-        lat: -33.4200929,
-        lng: -70.6128194226865,
-      },
-      title: 'Parque de las esculturas'
-    },
-    {
-      position: {
-        lat: -33.42862,
-        lng: -70.6195459,
-      },
-      title: 'Metro Manuel Montt'  	 	
-    },
-  ];
-
-  map = null ;
+  constructor(private http: HttpClient, private alertController: AlertController) { }
 
   ngOnInit() {
     this.loadMap();
+    this.mostrarPinsPublicacion();
   }
 
   loadMap() {
-    // create a new map by passing HTMLElement
     const mapEle: HTMLElement = document.getElementById('map')!;
-    // create LatLng object
-    const myLatLng = {lat: -33.43107, lng: -70.60454};
-    // create map 
+    const myLatLng = { lat: -33.43107, lng: -70.60454 };
     this.map = new google.maps.Map(mapEle, {
       center: myLatLng,
       zoom: 12
     });
-  
+
     google.maps.event.addListenerOnce(this.map, 'idle', () => {
-      // this.renderMarkers();
       mapEle.classList.add('show-map');
-      this.renderMarkers();
     });
   }
 
   addMarker(marker: Marker) {
-    return new google.maps.Marker({
+    const googleMarker = new google.maps.Marker({
       position: marker.position,
       map: this.map,
       title: marker.title
     });
+
+    // Agregar evento 'click' al marcador
+    googleMarker.addListener('click', () => {
+      this.showMarkerInfo(marker);
+    });
+
+    return googleMarker;
   }
 
   renderMarkers() {
@@ -80,4 +62,50 @@ export class Tab2Page implements OnInit {
     });
   }
 
+  mostrarPinsPublicacion() {
+    const mostrar = {};
+    this.http
+      .post('https://m50a5vjuy9.execute-api.us-east-1.amazonaws.com/desa', mostrar)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          const responseBody = JSON.parse(res.body);
+
+          if (responseBody.pinsMapa) {
+            const pinsMapa = responseBody.pinsMapa;
+            this.markers = this.convertirMarcadores(pinsMapa);
+            this.renderMarkers();
+            console.log(pinsMapa);
+          }
+        },
+        err => {
+          console.error('Error al enviar la publicación:', err);
+        }
+      );
+
+    console.log('Datos de la publicación:', mostrar);
+  }
+
+  convertirMarcadores(pinsMapa: any[]): Marker[] {
+    return pinsMapa.map((pin: any) => ({
+      position: {
+        lat: parseFloat(pin.latitud) || 0,
+        lng: parseFloat(pin.longitud) || 0
+      },
+      title: pin.titulo
+    }));
+  }
+
+  async showMarkerInfo(marker: Marker) {
+    const alert = await this.alertController.create({
+      header: marker.title,
+      message: `
+          <p>${marker.title}</p>
+          <p>${marker.position.lat}, ${marker.position.lng}</p>
+          <img src="https://www.perrosamigos.com/Uploads/perrosamigos.com/ImagenesGrandes/m-perros-dalmata.html-4.jpg"> `,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
 }
