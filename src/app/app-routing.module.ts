@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { EditarPerfilComponent } from './editar-perfil/editar-perfil.component';
+
 
 const routes: Routes = [
   
@@ -22,6 +24,10 @@ const routes: Routes = [
   {
     path: 'publicacion/:id',
     loadChildren: () => import('./publicacion/publicacion.module').then( m => m.PublicacionPageModule)
+  },
+  {
+    path: 'editar-perfil/:id',
+    component: EditarPerfilComponent
   }
   
 ];

@@ -7,4 +7,7 @@ export class CorreoService {
   correo: string = '';
 
   constructor() { }
+  limpiarCorreo() {
+    this.correo = '';
+  }
 }

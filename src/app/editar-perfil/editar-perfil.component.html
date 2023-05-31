@@ -1,0 +1,36 @@
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Editar perfil</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating">Correo electrónico</ion-label>
+          <ion-input [(ngModel)]="correo" name="correo" type="email" readonly></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input [(ngModel)]="nombre" name="nombre" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Apellido</ion-label>
+          <ion-input [(ngModel)]="apellido" name="apellido" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Contacto</ion-label>
+          <ion-input [(ngModel)]="contacto" name="contacto" type="number"></ion-input>
+        </ion-item>
+
+        <!-- Agrega más campos según tus necesidades -->
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block" color="primary" (click)="guardarPerfil()">Guardar</ion-button>
+</ion-content>

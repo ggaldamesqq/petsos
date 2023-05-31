@@ -10,26 +10,40 @@
   <ion-card>
     <img src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-Vector-PNG-Clipart.png" alt="Foto de perfil">
     <ion-card-header>
-      <ion-card-title>{{id}} - {{nombre}}</ion-card-title>
+      <ion-card-title>{{id}} - {{usuario}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-grid>
-       
+        <ion-row>
+          <ion-col size="auto">
+            <ion-icon name="person-outline"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <p>{{ nombre }} {{ apellido }}</p>
+          </ion-col>
+        </ion-row>
         <ion-row>
           <ion-col size="auto">
             <ion-icon name="mail-outline"></ion-icon>
           </ion-col>
           <ion-col>
-            <p>{{email}}</p>
+            <p>{{ email }}</p>
           </ion-col>
         </ion-row>
-        
+        <ion-row>
+          <ion-col size="auto">
+            <ion-icon name="call-outline"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <p>{{ contacto }}</p>
+          </ion-col>
+        </ion-row>
       </ion-grid>
     </ion-card-content>
 
     <ion-footer>
-      <ion-button expand="block" color="primary">Editar perfil</ion-button>
+      <ion-button expand="block" color="primary" (click)="editarPerfil()">Editar perfil</ion-button>
     </ion-footer>
   </ion-card>
 

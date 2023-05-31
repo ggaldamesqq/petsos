@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { CorreoService } from '../correo.service';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -10,8 +11,10 @@ import { CorreoService } from '../correo.service';
   export class Tab1Page {
 
   nombre: string = '';
+  usuario: string = '';
   apellido: string = '';
   email: string = '';
+  contacto: string = '';
   id: string = '';
 
   publicaciones: any[] = [
@@ -36,22 +39,35 @@ import { CorreoService } from '../correo.service';
   ];
   constructor(private http:HttpClient, private correoService: CorreoService,private navCtrl: NavController) {}
   ngOnInit() {
-    const email = this.correoService.correo;
-    console.log(email);// Utiliza el valor del correo electrónico en la página según sea necesario
-    this.iniciarSesion(email);
-    // https://tw3gntca78.execute-api.us-east-1.amazonaws.com/desa
+    const emailLS = localStorage.getItem('email');
+    console.log(emailLS);
+
+    if (emailLS) {
+      this.MostrarDatos(emailLS);
+      console.log("entra en emails")
+    } else {
+      const email = this.correoService.correo;
+      localStorage.clear(); // Limpiar todos los datos en localStorage
+      localStorage.setItem('email', email);
+      console.log("entra en el otro")
+
+      this.MostrarDatos(email);
+    }
   }
 
-  iniciarSesion(email: string) {
+  MostrarDatos(email: string) {
     this.http.post('https://tw3gntca78.execute-api.us-east-1.amazonaws.com/desa', { email:email })
       .subscribe(
         (res:any) => {
           console.log(res);
           let responseBody = JSON.parse(res.body);
          console.log(responseBody);
-         this.nombre = responseBody.usuario;
+         this.usuario = responseBody.usuario;
+         this.nombre = responseBody.nombre;
          this.id = responseBody.id;
          this.email = responseBody.correo;
+         this.apellido = responseBody.apellido;
+         this.contacto = responseBody.ntelefono;
         },
         err => {
           // this.mostrarAlerta(JSON.stringify(err.error), "Error");
@@ -60,7 +76,10 @@ import { CorreoService } from '../correo.service';
   }
 
   editarPerfil() {
-    console.log('Editar perfil');
+    const perfilId = this.id; // Obtén el ID del perfil que se desea editar
+
+    // Navegar a la página de edición de perfil y pasar el ID a través de la URL
+    this.navCtrl.navigateForward(`/editar-perfil/${perfilId}`);
   }
 
   editarPublicacion(publicacion: any) {

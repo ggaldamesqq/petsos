@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
-import { AlertController } from '@ionic/angular';
 import { HttpResponse } from '@angular/common/http';
 import { CorreoService } from '../correo.service';
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,8 @@ export class LoginPage implements OnInit {
   }
 
   iniciarSesion(email: string, password: string) {
+    this.correoService.limpiarCorreo();
+    console.log(this.correoService.correo);
     this.http.post('https://pkn6z9r7jf.execute-api.us-east-1.amazonaws.com/desa', { email:email,password: password })
       .subscribe(
         (res:any) => {
@@ -41,6 +44,7 @@ export class LoginPage implements OnInit {
           let responseBody = JSON.parse(res.body);
           if (responseBody.message == "Inicio de sesión exitoso") {
             this.correoService.correo = email;
+            localStorage.setItem('email', email);
             this.router.navigate(['tabs']); // Navega a las tabs si el inicio de sesión fue exitoso
           }
           else if (responseBody.message == "La contraseña es incorrecta")
@@ -48,6 +52,9 @@ export class LoginPage implements OnInit {
             this.mostrarAlerta(JSON.stringify(responseBody.message ), "Error");
           }
           else if (responseBody.message == "El usuario no está activo"){
+            this.mostrarAlerta(JSON.stringify(responseBody.message ), "Error");
+          }
+          else if (responseBody.message == "El usuario no existe"){
             this.mostrarAlerta(JSON.stringify(responseBody.message ), "Error");
           }
         },
