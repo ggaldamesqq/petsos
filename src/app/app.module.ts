@@ -13,12 +13,13 @@ import { Storage } from '@ionic/storage';
 import { MapModalModule } from './map-modal/map-modal.module'; 
 import { EditarPerfilComponent } from './editar-perfil/editar-perfil.component';
 import { FormsModule } from '@angular/forms';
+import { EditarPublicacionModule } from './editar-publicacion/editar-publicacion.module';
 
 
 
 @NgModule({
   declarations: [AppComponent,EditarPerfilComponent],
-  imports:   [MapModalModule,FormsModule, HttpClientModule, BrowserModule, IonicModule.forRoot({innerHTMLTemplatesEnabled: true}), AppRoutingModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
+  imports:   [ EditarPublicacionModule,MapModalModule,FormsModule, HttpClientModule, BrowserModule, IonicModule.forRoot({innerHTMLTemplatesEnabled: true}), AppRoutingModule, ReactiveFormsModule, IonicStorageModule.forRoot()],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },Storage],
   bootstrap: [AppComponent],
 })

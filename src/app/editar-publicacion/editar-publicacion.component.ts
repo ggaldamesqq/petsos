@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { CorreoService } from '../correo.service';
 import { ModalController } from '@ionic/angular';
 import { MapModalComponent } from '../map-modal/map-modal.component';
 import { Geolocation } from '@capacitor/geolocation';
-import { HttpClient } from '@angular/common/http';
-import { CorreoService } from '../correo.service';
+
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-editar-publicacion',
+  templateUrl: './editar-publicacion.component.html',
+  styleUrls: ['./editar-publicacion.component.scss']
 })
-export class Tab3Page implements OnInit {
+export class EditarPublicacionComponent implements OnInit {
   public publicacionForm: FormGroup;
+  publicacionId: Number | null = null;
   ubicacionValue: string = '';
   markerPosition: any;
   selectedFile: File | null = null;
@@ -23,9 +25,10 @@ export class Tab3Page implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private modalController: ModalController,
+    private route: ActivatedRoute,
     private http: HttpClient,
-    private correoService: CorreoService
+    private correoService: CorreoService,
+    private modalController: ModalController,
   ) {
     this.publicacionForm = this.formBuilder.group({
       ubicacion: ['', Validators.required],
@@ -40,7 +43,6 @@ export class Tab3Page implements OnInit {
       contacto: ['', Validators.required]
     });
   }
-
   async abrirMapaModal() {
     const modal = await this.modalController.create({
       component: MapModalComponent,
@@ -78,8 +80,7 @@ export class Tab3Page implements OnInit {
       console.error('Error al obtener la ubicación actual:', error);
     }
   }
-
-  public publicar(): void {
+  public actualizar(): void {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
     console.log(ubicacion);
     const selectedFile = this.publicacionForm.get('selectedFile')?.value;
@@ -115,13 +116,13 @@ export class Tab3Page implements OnInit {
     console.log('Contacto:', contacto);
 
     if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
-      this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, this.base64Image);
+      this.ActualizarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, this.base64Image);
     } else {
       // Maneja el caso en el que algún valor sea nulo
     }
   }
 
-  IngresarPublicacion(
+  ActualizarPublicacion(
     titulo: string,
     descripcion: string,
     categoria: string,
@@ -141,31 +142,31 @@ export class Tab3Page implements OnInit {
     console.log('Longitud:', longitud);
 
     console.log(latitud, longitud);
-
+    this.publicacionId = Number(this.route.snapshot.paramMap.get('id'));
     const datosPublicacion = {
+      id: this.publicacionId,
       titulo: titulo,
       descripcion: descripcion,
       categoria: categoria,
       especie: especie,
       raza: raza,
-      correo:this.correoService.correo,
       nombre: nombre,
       tipo: tipo,
       contacto: contacto,
       latitud: latitud,
       longitud: longitud,
-      imagen: imagen
+      imagen: imagen,
     };
 
     console.log(datosPublicacion);
 
     this.http
-      .post('https://os3ry5kxxh.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
+      .post('https://aw5xpejrp2.execute-api.us-east-1.amazonaws.com/desarrollo', datosPublicacion)
       .subscribe(
         (res: any) => {
           console.log(res);
           let responseBody = JSON.parse(res.body);
-          if (responseBody.message == "Publicación guardada y publicada correctamente") {
+          if (responseBody.message == "Publicación actualizada correctamente") {
             location.reload();
             // this.router.navigate(['tabs/tab2']);
             console.log(datosPublicacion);
@@ -192,11 +193,49 @@ export class Tab3Page implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+    this.publicacionId = Number(this.route.snapshot.paramMap.get('id'));
 
-  ngOnInit() {
+    if (this.publicacionId) {
+      this.MostrarDatosPublicacions(this.publicacionId);
+    }
+  }
+  MostrarDatosPublicacions(id:Number) {
+    this.http.post('https://0ljuxafhh5.execute-api.us-east-1.amazonaws.com/desa', {id})
+      .subscribe(
+        (res:any) => {
+          const responseBody = JSON.parse(res.body);
+          const InformacionPublicacion = responseBody.data;
+          console.log(InformacionPublicacion);
+          console.log(InformacionPublicacion[0].titulo);
 
-    console.log(this.correoService.correo);
-   }
+          const categoriaDB = InformacionPublicacion[0].categoria;
+          
+          let categoriaTexto = '';
+          if (categoriaDB === 'Mascota perdida') {
+            categoriaTexto = 'option1';
+          } else if (categoriaDB === 'Animales en abandono') {
+            categoriaTexto = 'option2';}
+          
+      
+          this.publicacionForm.patchValue({
+            titulo: InformacionPublicacion[0].titulo,
+            description: InformacionPublicacion[0].descripcion,
+            categoria: categoriaTexto,
+            ubicacion:InformacionPublicacion[0].latitud +','+InformacionPublicacion[0].longitud ,
+            especie: InformacionPublicacion[0].especie,
+            raza: InformacionPublicacion[0].raza,
+            nombre: InformacionPublicacion[0].nombre,
+            tipo: InformacionPublicacion[0].tipo,
+            contacto: InformacionPublicacion[0].contacto
+
+            // Establecer los demás campos de acuerdo a los datos recibidos
+          });
+          console.log(this.publicacionForm);
+        },
+        err => {
+        }
+      );
+  }
+ 
 }
-
-

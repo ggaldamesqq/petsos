@@ -59,11 +59,11 @@
         <ion-item *ngFor="let publicacion of publicaciones">
           <ion-label>
             <ion-thumbnail slot="start">
-              <img src="{{publicacion.imagen}}">
-            </ion-thumbnail> <br> <br> <br> <br> <br>
-            <h2>{{publicacion.titulo}}</h2>
-            <p>{{publicacion.categoria}}</p>
-            <p>{{publicacion.ubicacion}}</p>
+              <img src="{{ publicacion.imagen }}">
+            </ion-thumbnail>
+            <br> <br> <br> <br> <br>
+            <h2>{{ publicacion.titulo }}</h2>
+            <p>{{ publicacion.categoria }}</p>
             <ion-buttons slot="end">
               <ion-button color="primary" fill="clear" (click)="editarPublicacion(publicacion)">
                 <ion-icon name="create"></ion-icon>

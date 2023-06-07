@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { CorreoService } from '../correo.service';
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-tab1',
@@ -17,33 +19,16 @@ import { CorreoService } from '../correo.service';
   contacto: string = '';
   id: string = '';
 
-  publicaciones: any[] = [
-    {
-      titulo: 'Perro Labrador encontrado',
-      categoria: 'Animal Perdido',
-      ubicacion: 'Providencia',
-      imagen: 'https://upload.wikimedia.org/wikipedia/commons/0/04/Labrador_Retriever_%281210559%29.jpg',
-    },
-    {
-      titulo: 'Gato Siames encontrado',
-      categoria: 'Animal Perdido',
-      ubicacion: 'Las Condes',
-      imagen: 'https://www.vitapets.cl/wp-content/uploads/2021/01/siames-original.jpg',
-    },
-    {
-      titulo: 'Perro Cocker Spaniel encontrado',
-      categoria: 'Animal Perdido',
-      ubicacion: 'Vitacura',
-      imagen: 'https://www.bunko.pet/__export/1611884880111/sites/debate/img/2021/01/28/10_curiosidades_sobre_los_perros_cocker_spaniel_que_tal_vez_no_sabxas_crop1611884841022.jpeg_423682103.jpeg',
-    },
-  ];
-  constructor(private http:HttpClient, private correoService: CorreoService,private navCtrl: NavController) {}
+  publicaciones: any[] = [];
+  constructor(private alertController: AlertController,private http:HttpClient, private correoService: CorreoService,private navCtrl: NavController) {}
   ngOnInit() {
     const emailLS = localStorage.getItem('email');
     console.log(emailLS);
 
     if (emailLS) {
       this.MostrarDatos(emailLS);
+      this.MostrarPublicaciones(emailLS);
+
       console.log("entra en emails")
     } else {
       const email = this.correoService.correo;
@@ -52,6 +37,7 @@ import { CorreoService } from '../correo.service';
       console.log("entra en el otro")
 
       this.MostrarDatos(email);
+      this.MostrarPublicaciones(email);
     }
   }
 
@@ -74,21 +60,62 @@ import { CorreoService } from '../correo.service';
         }
       );
   }
-
+  MostrarPublicaciones(email: string) {
+    this.http.post('https://lhqt1569u5.execute-api.us-east-1.amazonaws.com/desa', { correo:email })
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          const responseBody = JSON.parse(res.body);
+          const Publicacioness = responseBody.publicaciones;
+          console.log(Publicacioness);
+          this.publicaciones = Publicacioness.map((pub: { id: string, titulo: string, categoria: string, imagen: string }) => ({...pub, correo: email}));
+      },
+        err => {
+          console.error(err);
+        }
+      );
+  }
   editarPerfil() {
     const perfilId = this.id; // Obtén el ID del perfil que se desea editar
-
     // Navegar a la página de edición de perfil y pasar el ID a través de la URL
     this.navCtrl.navigateForward(`/editar-perfil/${perfilId}`);
   }
 
   editarPublicacion(publicacion: any) {
     console.log('Editar publicación', publicacion);
+    const publicacionId = publicacion.id; // Obtén el ID de la publicación que se desea editar
+    // Navegar a la página de edición de publicación y pasar el ID a través de la URL
+    this.navCtrl.navigateForward(`/editar-publicacion/${publicacionId}`);
   }
 
   eliminarPublicacion(publicacion: any) {
     console.log('Eliminar publicación', publicacion);
+    console.log('Correo de la persona que creó la publicación:', publicacion.correo);
+    console.log('ID de la publicación:', publicacion.id);
+    this.EliminarPublicacions(publicacion.correo,publicacion.id);
+    
   }
+ EliminarPublicacions(correo: string, id:number) {
+    this.http.post('https://kym5gvwhda.execute-api.us-east-1.amazonaws.com/desa', {correo,id})
+      .subscribe(
+        (res:any) => {
+          console.log(res);
+          location.reload();
+          // this.mostrarAlerta(JSON.stringify("Publicacion eliminada correctamente."), "Error");
+        },
+        err => {
+          // this.mostrarAlerta(JSON.stringify(err.error), "Error");
+        }
+      );
+  }
+  async mostrarAlerta(mensaje: string, header:string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: mensaje,
+      buttons: ['Aceptar']
+    });
 
+    await alert.present();
+  }
 }
 

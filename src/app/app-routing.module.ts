@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { EditarPerfilComponent } from './editar-perfil/editar-perfil.component';
+import { EditarPublicacionComponent } from './editar-publicacion/editar-publicacion.component';
+
 
 
 const routes: Routes = [
@@ -28,7 +30,8 @@ const routes: Routes = [
   {
     path: 'editar-perfil/:id',
     component: EditarPerfilComponent
-  }
+  },
+  { path: 'editar-publicacion/:id', component: EditarPublicacionComponent }
   
 ];
 @NgModule({
