@@ -13,12 +13,20 @@ import { CorreoService } from '../correo.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page implements OnInit {
+
+  // Esconder formulario
+  formularioUsuario : boolean = true;
+  formularioAdmin : boolean = true;
+  userRole : string = "admin"; // Aquí reemplazar con el rol
+
+
   public publicacionForm: FormGroup;
   ubicacionValue: string = '';
   markerPosition: any;
   selectedFile: File | null = null;
   base64Image: string | null = null;
   correo : string = '' ;
+  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,18 +35,39 @@ export class Tab3Page implements OnInit {
     private http: HttpClient,
     private correoService: CorreoService
   ) {
-    this.publicacionForm = this.formBuilder.group({
-      ubicacion: ['', Validators.required],
-      selectedFile: [null, Validators.required],
-      titulo: ['', Validators.required],
-      description: ['', Validators.required],
-      categoria: ['option1'], // Valor por defecto
-      especie: ['', Validators.required],
-      raza: ['', Validators.required],
-      nombre: ['', Validators.required],
-      tipo: ['', Validators.required],
-      contacto: ['', Validators.required]
-    });
+
+
+    //Esconder formulario
+    if (this.userRole === 'normal') {
+      this.formularioUsuario = true; //Mostrar formulario usuario
+      this.formularioAdmin = false ; //Esconder formulario admin
+
+      this.publicacionForm = this.formBuilder.group({
+        ubicacion: ['', Validators.required],
+        selectedFile: [null, Validators.required],
+        titulo: ['', Validators.required],
+        description: ['', Validators.required],
+        categoria: ['option1'], // Valor por defecto
+        especie: ['', Validators.required],
+        raza: ['', Validators.required],
+        nombre: ['', Validators.required],
+        tipo: ['', Validators.required],
+        contacto: ['', Validators.required]
+      });
+    }
+    else {
+      this.formularioUsuario = false; //Esconder formulario usuario
+      this.formularioAdmin = true; //Mostrar formulario admin
+
+      this.publicacionForm = this.formBuilder.group({
+        ubicacion: ['', Validators.required],
+        selectedFile: [null, Validators.required],
+        titulo: ['', Validators.required],
+        description: ['', Validators.required],
+        categoria: ['option1'], // Valor por defecto
+        contacto: ['', Validators.required]
+      });
+    }
   }
 
   async abrirMapaModal() {
@@ -201,6 +230,7 @@ export class Tab3Page implements OnInit {
       this.correo = ''; // Asignar un valor por defecto si no hay correo en el localStorage
     }
   }
+
 }
 
 
