@@ -141,14 +141,14 @@ export class Tab3Page implements OnInit {
     console.log('Longitud:', longitud);
 
     console.log(latitud, longitud);
-
+    const emailLS = localStorage.getItem('email');
     const datosPublicacion = {
       titulo: titulo,
       descripcion: descripcion,
       categoria: categoria,
       especie: especie,
       raza: raza,
-      correo:this.correoService.correo,
+      correo:emailLS ? emailLS : '',
       nombre: nombre,
       tipo: tipo,
       contacto: contacto,
@@ -194,9 +194,13 @@ export class Tab3Page implements OnInit {
 
 
   ngOnInit() {
-
-    console.log(this.correoService.correo);
-   }
+    const emailLS = localStorage.getItem('email');
+    if (emailLS) {
+      this.correo = emailLS; // Asignar el valor del localStorage a la variable correo
+    } else {
+      this.correo = ''; // Asignar un valor por defecto si no hay correo en el localStorage
+    }
+  }
 }
 
 

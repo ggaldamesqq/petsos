@@ -13,6 +13,8 @@ interface Marker {
   imagen: string;
   descripcion:string;
   contacto:string;
+  icono?:string;
+  categoria:string;
 }
 
 @Component({
@@ -23,7 +25,7 @@ interface Marker {
 export class Tab2Page implements OnInit {
   markers: Marker[] = [];
   map = null;
-
+  
   constructor(private http: HttpClient, private alertController: AlertController) { }
 
   ngOnInit() {
@@ -48,7 +50,14 @@ export class Tab2Page implements OnInit {
     const googleMarker = new google.maps.Marker({
       position: marker.position,
       map: this.map,
-      title: marker.title
+      title: marker.categoria,
+      icon: new google.maps.MarkerImage(
+        marker.icono,
+        null, // size: null para que el tamaño del ícono se ajuste automáticamente
+        null, // origin: null para utilizar la parte superior izquierda del ícono como punto de origen
+        null, // anchor: null para utilizar la parte superior izquierda del ícono como punto de anclaje
+        new google.maps.Size(80, 80) // scaledSize: tamaño deseado del ícono
+      )
     });
 
     // Agregar evento 'click' al marcador
@@ -98,7 +107,9 @@ export class Tab2Page implements OnInit {
       title: pin.titulo,
       descripcion:pin.descripcion,
       imagen: pin.imagen,
-      contacto:pin.contacto
+      contacto:pin.contacto,
+      categoria: pin.categoria,
+      icono: this.getIconoCategoria(pin.categoria)
     }));
   }
 
@@ -115,4 +126,14 @@ export class Tab2Page implements OnInit {
 
     await alert.present();
   }
+  getIconoCategoria(categoria: string): string {
+    if (categoria === 'Mascota perdida') {
+      return './assets/icon/mascotas.png';
+    } else if (categoria === 'Animales en abandono') {
+      return './assets/icon/animalesabandonados.png';
+    } else {
+      return './assets/icon/pordefecto.png'; // Ruta del ícono por defecto
+    }
+  }
+
 }
