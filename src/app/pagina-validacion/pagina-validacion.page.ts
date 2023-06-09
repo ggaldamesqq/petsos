@@ -46,7 +46,7 @@ export class PaginaValidacionPage implements OnInit {
           let responseBody = JSON.parse(res.body);
           // Comprueba si la validación fue exitosa
           if (responseBody.message == "El código fue validado correctamente.") {
-            this.router.navigate(['tabs']); // Navega a las tabs si la validación fue exitosa
+            this.router.navigate(['login']); // Navega a las tabs si la validación fue exitosa
           } else {
             this.mostrarAlerta("Error", responseBody.message || 'Código incorrecto');
             // Muestra un mensaje de error si la validación falló

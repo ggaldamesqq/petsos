@@ -15,32 +15,43 @@ import { CorreoService } from '../correo.service';
 export class Tab3Page implements OnInit {
 
   // Esconder formulario
-  formularioUsuario : boolean = true;
-  formularioAdmin : boolean = true;
-  userRole : string = "admin"; // Aquí reemplazar con el rol
+  formularioUsuario: boolean = true;
+  formularioAdmin: boolean = true;
+  userRole: string = "normal"; // Aquí reemplazar con el rol
 
 
-  public publicacionForm: FormGroup;
+  public publicacionForm!: FormGroup;
   ubicacionValue: string = '';
   markerPosition: any;
   selectedFile: File | null = null;
   base64Image: string | null = null;
-  correo : string = '' ;
-  
+  correo: string = '';
+  tipo: string = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private modalController: ModalController,
-    private http: HttpClient,
-    private correoService: CorreoService
-  ) {
+  ngOnInit() {
+    const emailLS = localStorage.getItem('email');
+    if (emailLS) {
+      this.correo = emailLS; // Asignar el valor del localStorage a la variable correo
+    } else {
+      this.correo = ''; // Asignar un valor por defecto si no hay correo en el localStorage
+    }
+
+    const tipoLS = localStorage.getItem('tipo');
+    if (tipoLS) {
+      this.tipo = tipoLS;
+    } else {
+      // Asigna un valor por defecto si no hay un valor en localStorage
+      this.tipo = 'normala';
+    }
+
+    console.log(emailLS, this.tipo);
+
 
 
     //Esconder formulario
-    if (this.userRole === 'normal') {
+    if (this.tipo == 'normal') {
       this.formularioUsuario = true; //Mostrar formulario usuario
-      this.formularioAdmin = false ; //Esconder formulario admin
+      this.formularioAdmin = false; //Esconder formulario admin
 
       this.publicacionForm = this.formBuilder.group({
         ubicacion: ['', Validators.required],
@@ -60,14 +71,24 @@ export class Tab3Page implements OnInit {
       this.formularioAdmin = true; //Mostrar formulario admin
 
       this.publicacionForm = this.formBuilder.group({
+        titulo: ['', Validators.required],
         ubicacion: ['', Validators.required],
         selectedFile: [null, Validators.required],
-        titulo: ['', Validators.required],
-        description: ['', Validators.required],
+        paginaWeb: [''],
         categoria: ['option1'], // Valor por defecto
         contacto: ['', Validators.required]
       });
     }
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private modalController: ModalController,
+    private http: HttpClient,
+    private correoService: CorreoService
+  ) {
+
   }
 
   async abrirMapaModal() {
@@ -111,15 +132,18 @@ export class Tab3Page implements OnInit {
   public publicar(): void {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
     console.log(ubicacion);
-    const selectedFile = this.publicacionForm.get('selectedFile')?.value;
-    const titulo = this.publicacionForm.get('titulo')?.value;
-    const description = this.publicacionForm.get('description')?.value;
-    const categoria = this.publicacionForm.get('categoria')?.value;
-    const especie = this.publicacionForm.get('especie')?.value;
-    const raza = this.publicacionForm.get('raza')?.value;
-    const nombre = this.publicacionForm.get('nombre')?.value;
-    const tipo = this.publicacionForm.get('tipo')?.value;
-    const contacto = this.publicacionForm.get('contacto')?.value;
+    const selectedFile = this.publicacionForm.get('selectedFile')?.value ?? ' ';
+    const titulo = this.publicacionForm.get('titulo')?.value ?? ' ';
+    const description = this.publicacionForm.get('description')?.value ?? ' ';
+    const categoria = this.publicacionForm.get('categoria')?.value ?? ' ';
+    const especie = this.publicacionForm.get('especie')?.value ?? ' ';
+    const raza = this.publicacionForm.get('raza')?.value ?? ' ';
+    const nombre = this.publicacionForm.get('nombre')?.value ?? ' ';
+    const tipo = this.publicacionForm.get('tipo')?.value ?? ' ';
+    const contacto = this.publicacionForm.get('contacto')?.value ?? ' ';
+    const paginaWeb = this.publicacionForm.get('paginaWeb')?.value ?? ' ';
+
+
 
     // Obtén el texto correspondiente a la categoría seleccionada
     let categoriaTexto = '';
@@ -144,7 +168,7 @@ export class Tab3Page implements OnInit {
     console.log('Contacto:', contacto);
 
     if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
-      this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, this.base64Image);
+      this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, paginaWeb, this.base64Image);
     } else {
       // Maneja el caso en el que algún valor sea nulo
     }
@@ -159,6 +183,7 @@ export class Tab3Page implements OnInit {
     nombre: string,
     tipo: string,
     contacto: string,
+    paginaWeb: string,
     imagen: string
   ) {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
@@ -171,23 +196,46 @@ export class Tab3Page implements OnInit {
 
     console.log(latitud, longitud);
     const emailLS = localStorage.getItem('email');
-    const datosPublicacion = {
-      titulo: titulo,
-      descripcion: descripcion,
-      categoria: categoria,
-      especie: especie,
-      raza: raza,
-      correo:emailLS ? emailLS : '',
-      nombre: nombre,
-      tipo: tipo,
-      contacto: contacto,
-      latitud: latitud,
-      longitud: longitud,
-      imagen: imagen
-    };
 
-    console.log(datosPublicacion);
+    if (this.tipo == 'normal') {
+      const datosPublicacion = {
+        titulo: titulo,
+        descripcion: descripcion,
+        categoria: categoria,
+        especie: especie,
+        raza: raza,
+        correo: emailLS ? emailLS : '',
+        nombre: nombre,
+        tipo: tipo,
+        contacto: contacto,
+        latitud: latitud,
+        longitud: longitud,
+        imagen: imagen
+      };
 
+      console.log(datosPublicacion);
+      this.IngresarPublicacionUsuario(datosPublicacion);
+
+    }
+    else {
+      console.log("entraadmin");
+      const datosPublicacion = {
+        titulo: titulo,
+        categoria: categoria,
+        tipo: tipo,
+        correo: emailLS ? emailLS : '',
+        contacto: contacto,
+        longitud: longitud,
+        latitud: latitud,
+        paginaWeb: paginaWeb,
+        imagen: imagen
+      };
+
+      this.IngresarPublicacionAdmin(datosPublicacion);
+    }
+
+  }
+  public IngresarPublicacionUsuario(datosPublicacion: any) {
     this.http
       .post('https://os3ry5kxxh.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
       .subscribe(
@@ -207,11 +255,36 @@ export class Tab3Page implements OnInit {
       );
 
     console.log('Datos de la publicación:', datosPublicacion);
+
+  }
+
+  public IngresarPublicacionAdmin(datosPublicacion: any) {
+    this.http
+      .post('https://p0akcomwk2.execute-api.us-east-1.amazonaws.com/desa', datosPublicacion)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          let responseBody = JSON.parse(res.body);
+          console.log(responseBody);
+          if (responseBody.message == "Publicación guardada y publicada correctamente") {
+            location.reload();
+            // this.router.navigate(['tabs/tab2']);
+            // console.log(datosPublicacion);
+
+          }
+        },
+        err => {
+          console.error('Error al enviar la publicación:', err);
+        }
+      );
+
+    console.log('Datos de la publicación:', datosPublicacion);
+
   }
 
   onFileChange(event: any): void {
     const files = event.target.files;
-    
+
     if (files && files.length) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -222,14 +295,7 @@ export class Tab3Page implements OnInit {
   }
 
 
-  ngOnInit() {
-    const emailLS = localStorage.getItem('email');
-    if (emailLS) {
-      this.correo = emailLS; // Asignar el valor del localStorage a la variable correo
-    } else {
-      this.correo = ''; // Asignar un valor por defecto si no hay correo en el localStorage
-    }
-  }
+
 
 }
 

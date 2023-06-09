@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { CorreoService } from '../correo.service';
 import { AlertController } from '@ionic/angular';
+import { response } from 'express';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { AlertController } from '@ionic/angular';
   email: string = '';
   contacto: string = '';
   id: string = '';
+  tipo: string = '';
 
   publicaciones: any[] = [];
   constructor(private alertController: AlertController,private http:HttpClient, private correoService: CorreoService,private navCtrl: NavController) {}
@@ -39,6 +41,17 @@ import { AlertController } from '@ionic/angular';
       this.MostrarDatos(email);
       this.MostrarPublicaciones(email);
     }
+
+    const tipoLS = localStorage.getItem('tipo');
+    if (tipoLS) {
+      this.tipo = tipoLS;
+      
+    } else {
+      // Asigna un valor por defecto si no hay un valor en localStorage
+      this.tipo = 'normal';
+    }
+    console.log(tipoLS);
+
   }
 
   MostrarDatos(email: string) {
@@ -54,6 +67,8 @@ import { AlertController } from '@ionic/angular';
          this.email = responseBody.correo;
          this.apellido = responseBody.apellido;
          this.contacto = responseBody.ntelefono;
+         this.tipo = responseBody.tipo;
+         localStorage.setItem('tipo', this.tipo);
         },
         err => {
           // this.mostrarAlerta(JSON.stringify(err.error), "Error");

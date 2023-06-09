@@ -31,7 +31,12 @@ const routes: Routes = [
     path: 'editar-perfil/:id',
     component: EditarPerfilComponent
   },
-  { path: 'editar-publicacion/:id', component: EditarPublicacionComponent }
+  { path: 'editar-publicacion/:id',
+   component: EditarPublicacionComponent
+  },{
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  }
   
 ];
 @NgModule({

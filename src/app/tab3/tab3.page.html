@@ -11,7 +11,7 @@
   <div class="container">
 
     <!-- Formulario usuario  -->
-    <ion-card *ngIf="formularioUsuario"  class="custom-card">
+    <ion-card *ngIf="formularioUsuario" class="custom-card">
       <ion-card-content class="custom-card-content">
         <form [formGroup]="publicacionForm" (ngSubmit)="publicar()">
           <ion-list class="custom-list">
@@ -22,13 +22,14 @@
                 <ion-button (click)="obtenerUbicacionActual()">Ubicación actual</ion-button>
                 <ion-button (click)="abrirMapaModal()">Elegir ubicación</ion-button>
               </div>
-            </ion-item>            
+            </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <label for="file-upload">
                 Subir foto (*)
                 <ion-icon name="image-outline" slot="start"></ion-icon>
               </label>
-              <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*" hidden formControlName="selectedFile">
+              <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*" hidden
+                formControlName="selectedFile">
             </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Título (*)</ion-label>
@@ -75,7 +76,7 @@
 
 
     <!-- Formulario admin -->
-    <ion-card *ngIf="formularioAdmin"  class="custom-card-admin">
+    <ion-card *ngIf="formularioAdmin" class="custom-card-admin">
       <ion-card-content class="custom-card-content">
         <form [formGroup]="publicacionForm" (ngSubmit)="publicar()">
           <ion-list class="custom-list">
@@ -86,33 +87,34 @@
                 <ion-button (click)="obtenerUbicacionActual()">Ubicación actual</ion-button>
                 <ion-button (click)="abrirMapaModal()">Elegir ubicación</ion-button>
               </div>
-            </ion-item>            
+            </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <label for="file-upload">
                 Subir foto (*)
                 <ion-icon name="image-outline" slot="start"></ion-icon>
               </label>
-              <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*" hidden formControlName="selectedFile">
+              <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*" hidden
+                formControlName="selectedFile">
             </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Título (*)</ion-label>
               <ion-input type="text" formControlName="titulo"></ion-input>
             </ion-item>
-            <ion-item class="custom-list-item" lines="none">
-              <ion-label position="floating">Descripción (*)</ion-label>
-              <ion-textarea formControlName="description"></ion-textarea>
-            </ion-item>
+
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Categoría (*)</ion-label>
               <ion-select formControlName="categoria" interface="popover">
                 <ion-select-option value="option1">Tienda</ion-select-option>
                 <ion-select-option value="option2">Veterinaria</ion-select-option>
-                <ion-select-option value="option3">Servicio</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item class="custom-list-item" lines="none">
               <ion-label position="floating">Contacto (*)</ion-label>
               <ion-input type="text" formControlName="contacto" inputmode="numeric"></ion-input>
+            </ion-item>
+            <ion-item class="custom-list-item" lines="none">
+              <ion-label position="floating">Página web</ion-label>
+              <ion-input type="text" formControlName="paginaWeb"></ion-input>
             </ion-item>
           </ion-list>
           <ion-button expand="block" type="submit" [disabled]="!publicacionForm.valid">Publicar</ion-button>
