@@ -75,7 +75,7 @@ export class Tab3Page implements OnInit {
         ubicacion: ['', Validators.required],
         selectedFile: [null, Validators.required],
         paginaWeb: [''],
-        categoria: ['option1'], // Valor por defecto
+        categoriaAdmin: ['option1'], // Valor por defecto
         contacto: ['', Validators.required]
       });
     }
@@ -136,6 +136,8 @@ export class Tab3Page implements OnInit {
     const titulo = this.publicacionForm.get('titulo')?.value ?? ' ';
     const description = this.publicacionForm.get('description')?.value ?? ' ';
     const categoria = this.publicacionForm.get('categoria')?.value ?? ' ';
+    const categoriaAdmin = this.publicacionForm.get('categoriaAdmin')?.value ?? ' ';
+
     const especie = this.publicacionForm.get('especie')?.value ?? ' ';
     const raza = this.publicacionForm.get('raza')?.value ?? ' ';
     const nombre = this.publicacionForm.get('nombre')?.value ?? ' ';
@@ -146,31 +148,48 @@ export class Tab3Page implements OnInit {
 
 
     // Obtén el texto correspondiente a la categoría seleccionada
-    let categoriaTexto = '';
-    if (categoria === 'option1') {
-      categoriaTexto = 'Mascota perdida';
-    } else if (categoria === 'option2') {
-      categoriaTexto = 'Animales en abandono';
-    } else if (categoria === 'option3') {
-      categoriaTexto = 'Servicio';
+   
+
+    // // Utiliza los valores del formulario
+    // console.log('Ubicación:', ubicacion);
+    // console.log('Selected File:', selectedFile);
+    // console.log('Título:', titulo);
+    // console.log('Descripción:', description);
+    // console.log('Categoría:', categoriaTexto);
+    // console.log('Especie:', especie);
+    // console.log('Raza:', raza);
+    // console.log('Nombre:', nombre);
+    // console.log('Tipo:', tipo);
+    // console.log('Contacto:', contacto);
+
+    if (this.tipo == 'normal')
+    {
+      let categoriaTexto = '';
+      if (categoria === 'option1') {
+        categoriaTexto = 'Mascota perdida';
+      } else if (categoria === 'option2') {
+        categoriaTexto = 'Animales en abandono';
+      } 
+
+      if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
+        this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, paginaWeb, this.base64Image,'');
+      } else {
+        // Maneja el caso en el que algún valor sea nulo
+      }
     }
+    else{
+      let categoriaTexto = '';
+      if (categoriaAdmin === 'option1') {
+        categoriaTexto = 'Tienda';
+      } else if (categoriaAdmin === 'option2') {
+        categoriaTexto = 'Veterinaria';
+      }
 
-    // Utiliza los valores del formulario
-    console.log('Ubicación:', ubicacion);
-    console.log('Selected File:', selectedFile);
-    console.log('Título:', titulo);
-    console.log('Descripción:', description);
-    console.log('Categoría:', categoriaTexto);
-    console.log('Especie:', especie);
-    console.log('Raza:', raza);
-    console.log('Nombre:', nombre);
-    console.log('Tipo:', tipo);
-    console.log('Contacto:', contacto);
-
-    if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
-      this.IngresarPublicacion(titulo, description, categoriaTexto, especie, raza, nombre, tipo, contacto, paginaWeb, this.base64Image);
-    } else {
-      // Maneja el caso en el que algún valor sea nulo
+      if (ubicacion && this.base64Image && titulo && description && categoriaTexto && especie && raza && nombre && tipo && contacto) {
+        this.IngresarPublicacion(titulo, description, '', especie, raza, nombre, tipo, contacto, paginaWeb, this.base64Image,categoriaTexto );
+      } else {
+        // Maneja el caso en el que algún valor sea nulo
+      }
     }
   }
 
@@ -184,7 +203,8 @@ export class Tab3Page implements OnInit {
     tipo: string,
     contacto: string,
     paginaWeb: string,
-    imagen: string
+    imagen: string,
+    categoriaAdmin: string
   ) {
     const ubicacion = this.publicacionForm.get('ubicacion')?.value;
     console.log(ubicacion);
@@ -221,7 +241,7 @@ export class Tab3Page implements OnInit {
       console.log("entraadmin");
       const datosPublicacion = {
         titulo: titulo,
-        categoria: categoria,
+        categoria: categoriaAdmin,
         tipo: tipo,
         correo: emailLS ? emailLS : '',
         contacto: contacto,

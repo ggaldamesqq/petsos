@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CorreoService } from '../correo.service';
 import { AlertController } from '@ionic/angular';
 import { response } from 'express';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,14 +23,16 @@ import { response } from 'express';
   tipo: string = '';
 
   publicaciones: any[] = [];
-  constructor(private alertController: AlertController,private http:HttpClient, private correoService: CorreoService,private navCtrl: NavController) {}
+  constructor(private alertController: AlertController,private http:HttpClient, private router: Router, private correoService: CorreoService,private navCtrl: NavController) {}
   ngOnInit() {
     const emailLS = localStorage.getItem('email');
+    const tipoLS = localStorage.getItem('tipo');
+
     console.log(emailLS);
 
-    if (emailLS) {
+    if (emailLS && tipoLS) {
       this.MostrarDatos(emailLS);
-      this.MostrarPublicaciones(emailLS);
+      this.MostrarPublicaciones(emailLS,tipoLS);
 
       console.log("entra en emails")
     } else {
@@ -39,10 +42,9 @@ import { response } from 'express';
       console.log("entra en el otro")
 
       this.MostrarDatos(email);
-      this.MostrarPublicaciones(email);
+      // this.MostrarPublicaciones(email, tipoLS);
     }
 
-    const tipoLS = localStorage.getItem('tipo');
     if (tipoLS) {
       this.tipo = tipoLS;
       
@@ -75,11 +77,13 @@ import { response } from 'express';
         }
       );
   }
-  MostrarPublicaciones(email: string) {
-    this.http.post('https://lhqt1569u5.execute-api.us-east-1.amazonaws.com/desa', { correo:email })
+  MostrarPublicaciones(email: string, tipo:string) {
+    this.http.post('https://lhqt1569u5.execute-api.us-east-1.amazonaws.com/desa', { correo:email, tipo:tipo })
       .subscribe(
         (res: any) => {
-          console.log(res);
+          console.log(tipo);
+          console.log(email);
+
           const responseBody = JSON.parse(res.body);
           const Publicacioness = responseBody.publicaciones;
           console.log(Publicacioness);
@@ -131,6 +135,9 @@ import { response } from 'express';
     });
 
     await alert.present();
+  }
+  cerrarSesion(){
+    this.router.navigate(['login']);
   }
 }
 

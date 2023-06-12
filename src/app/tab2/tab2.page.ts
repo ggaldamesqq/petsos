@@ -31,6 +31,7 @@ export class Tab2Page implements OnInit {
   ngOnInit() {
     this.loadMap();
     this.mostrarPinsPublicacion();
+    this.mostrarPinsPublicacion_Admin();
   }
 
   loadMap() {
@@ -98,6 +99,29 @@ export class Tab2Page implements OnInit {
     console.log('Datos de la publicación:', mostrar);
   }
 
+  mostrarPinsPublicacion_Admin() {
+    const mostrar = {};
+    this.http
+      .post('https://u6iytenbbf.execute-api.us-east-1.amazonaws.com/desa', mostrar)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          const responseBody = JSON.parse(res.body);
+
+          if (responseBody.pinsMapa) {
+            const pinsMapa = responseBody.pinsMapa;
+            this.markers = this.convertirMarcadores(pinsMapa);
+            this.renderMarkers();
+            console.log(pinsMapa);
+          }
+        },
+        err => {
+          console.error('Error al enviar la publicación:', err);
+        }
+      );
+
+    console.log('Datos de la publicación:', mostrar);
+  }
   convertirMarcadores(pinsMapa: any[]): Marker[] {
     return pinsMapa.map((pin: any) => ({
       position: {
@@ -131,9 +155,16 @@ export class Tab2Page implements OnInit {
       return './assets/icon/mascotas.png';
     } else if (categoria === 'Animales en abandono') {
       return './assets/icon/animalesabandonados.png';
-    } else {
-      return './assets/icon/pordefecto.png'; // Ruta del ícono por defecto
+    } else if (categoria === 'Tienda') {
+      return './assets/icon/tienda.png';
+    } else if (categoria === 'Tienda') {
+      return './assets/icon/veterinaria.png';
+    } 
+    else {
+      return ''; // Ruta del ícono por defecto
     }
   }
+
+  
 
 }

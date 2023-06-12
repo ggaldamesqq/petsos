@@ -45,6 +45,9 @@ export class LoginPage implements OnInit {
           if (responseBody.message == "Inicio de sesión exitoso") {
             this.correoService.correo = email;
             localStorage.setItem('email', email);
+            localStorage.setItem('tipo', responseBody.userTipo);
+            
+
             this.router.navigate(['tabs']); // Navega a las tabs si el inicio de sesión fue exitoso
           }
           else if (responseBody.message == "La contraseña es incorrecta")
