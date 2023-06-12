@@ -36,6 +36,9 @@ export class LoginPage implements OnInit {
 
   iniciarSesion(email: string, password: string) {
     this.correoService.limpiarCorreo();
+    localStorage.removeItem("email");
+    localStorage.removeItem("tipo");
+
     console.log(this.correoService.correo);
     this.http.post('https://pkn6z9r7jf.execute-api.us-east-1.amazonaws.com/desa', { email:email,password: password })
       .subscribe(
@@ -46,7 +49,6 @@ export class LoginPage implements OnInit {
             this.correoService.correo = email;
             localStorage.setItem('email', email);
             localStorage.setItem('tipo', responseBody.userTipo);
-            
 
             this.router.navigate(['tabs']); // Navega a las tabs si el inicio de sesión fue exitoso
           }
@@ -82,5 +84,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+
+    
   }
 }

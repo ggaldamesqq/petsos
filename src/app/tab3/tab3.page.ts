@@ -46,8 +46,6 @@ export class Tab3Page implements OnInit {
 
     console.log(emailLS, this.tipo);
 
-
-
     //Esconder formulario
     if (this.tipo == 'normal') {
       this.formularioUsuario = true; //Mostrar formulario usuario

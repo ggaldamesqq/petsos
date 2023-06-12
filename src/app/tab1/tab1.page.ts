@@ -27,7 +27,7 @@ import { Router } from '@angular/router';
   ngOnInit() {
     const emailLS = localStorage.getItem('email');
     const tipoLS = localStorage.getItem('tipo');
-
+    
     console.log(emailLS);
 
     if (emailLS && tipoLS) {
@@ -115,17 +115,35 @@ import { Router } from '@angular/router';
     
   }
  EliminarPublicacions(correo: string, id:number) {
+
+  if (this.tipo == 'normal')
+  {
     this.http.post('https://kym5gvwhda.execute-api.us-east-1.amazonaws.com/desa', {correo,id})
-      .subscribe(
-        (res:any) => {
-          console.log(res);
-          location.reload();
-          // this.mostrarAlerta(JSON.stringify("Publicacion eliminada correctamente."), "Error");
-        },
-        err => {
-          // this.mostrarAlerta(JSON.stringify(err.error), "Error");
-        }
-      );
+    .subscribe(
+      (res:any) => {
+        console.log(res);
+        location.reload();
+        // this.mostrarAlerta(JSON.stringify("Publicacion eliminada correctamente."), "Error");
+      },
+      err => {
+        // this.mostrarAlerta(JSON.stringify(err.error), "Error");
+      }
+    );
+  }
+  else if (this.tipo == 'admin'){
+    this.http.post('https://zvptepeu0f.execute-api.us-east-1.amazonaws.com/desa', {correo,id})
+    .subscribe(
+      (res:any) => {
+        console.log(res);
+        location.reload();
+        // this.mostrarAlerta(JSON.stringify("Publicacion eliminada correctamente."), "Error");
+      },
+      err => {
+        // this.mostrarAlerta(JSON.stringify(err.error), "Error");
+      }
+    );
+  }
+    
   }
   async mostrarAlerta(mensaje: string, header:string) {
     const alert = await this.alertController.create({
@@ -138,6 +156,8 @@ import { Router } from '@angular/router';
   }
   cerrarSesion(){
     this.router.navigate(['login']);
+    localStorage.removeItem('email');
+    localStorage.removeItem('tipo');
   }
 }
 

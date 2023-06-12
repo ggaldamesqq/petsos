@@ -157,7 +157,7 @@ export class Tab2Page implements OnInit {
       return './assets/icon/animalesabandonados.png';
     } else if (categoria === 'Tienda') {
       return './assets/icon/tienda.png';
-    } else if (categoria === 'Tienda') {
+    } else if (categoria === 'Veterinaria') {
       return './assets/icon/veterinaria.png';
     } 
     else {
